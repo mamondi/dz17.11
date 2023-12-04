@@ -1,36 +1,74 @@
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
-void fillSums(int* A, int* B, int* C, int size) {
-    for (int i = 0; i < size; ++i) {
-        C[i] = A[i] + B[i];
+
+int findMax(int* arr, int size) {
+    int maxVal = arr[0];
+    for (int i = 1; i < size; ++i) {
+        if (arr[i] > maxVal) {
+            maxVal = arr[i];
+        }
     }
+    return maxVal;
+}
+
+int findMin(int* arr, int size) {
+    int minVal = arr[0];
+    for (int i = 1; i < size; ++i) {
+        if (arr[i] < minVal) {
+            minVal = arr[i];
+        }
+    }
+    return minVal;
+}
+
+double findAvg(int* arr, int size) {
+    double sum = 0;
+    for (int i = 0; i < size; ++i) {
+        sum += arr[i];
+    }
+    return sum / size;
+}
+
+double Action(int* A, int* B, int size, int (*func)(int*, int)) {
+    return func(A, size) + func(B, size);
 }
 
 int main() {
     const int size = 5;
+    int A[size] = { 10, 20, 30, 40, 50 };
+    int B[size] = { 5, 15, 25, 35, 45 };
 
-    int A[size] = { 1, 2, 3, 4, 5 };
-    int B[size] = { 5, 4, 3, 2, 1 };
-    int C[size];
+    cout << "Choose an action:\n";
+    cout << "1. Max\n";
+    cout << "2. Min\n";
+    cout << "3. Avg\n";
 
-    fillSums(A, B, C, size);
+    int choice;
+    cin >> choice;
 
-    cout << "Array A: ";
-    for (int i = 0; i < size; ++i) {
-        cout << A[i] << " ";
+    int (*funcPointer)(int*, int);
+
+    switch (choice) {
+    case 1:
+        funcPointer = findMax;
+        break;
+    case 2:
+        funcPointer = findMin;
+        break;
+    case 3:
+        funcPointer = findAvg;
+        break;
+    default:
+        cout << "Invalid choice\n";
+        return 1;
     }
 
-    cout << "\nArray B: ";
-    for (int i = 0; i < size; ++i) {
-        cout << B[i] << " ";
-    }
+    double result = Action(A, B, size, funcPointer);
 
-    cout << "\nArray C (sum of A and B): ";
-    for (int i = 0; i < size; ++i) {
-        cout << C[i] << " ";
-    }
+    cout << "Result: " << result << endl;
 
     return 0;
 }
